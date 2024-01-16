@@ -42,9 +42,9 @@ app.post("/api/notes", (req, res) => {
   const notes = data ? JSON.parse(data) : []; // so, read the file, save the array to a variable
   const notesStr = JSON.stringify(notes, null, 2);  // then, we need to push the new note to the variable
   fs.writeFileSync('./db/db.json', notesStr);  // then, we need to write to the file
-  res.json(notes);
-
-  // then we need to respond with some sort of confirmation
+  res.json(notes);  // this is sending the data from the json file back
+ // then we need to respond with some sort of confirmation
+ 
 });
 
 // HTML SERVED FROM VIEWS AS ROUTES
