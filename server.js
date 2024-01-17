@@ -16,6 +16,7 @@
 const fs = require("fs");
 const util = require("util");
 const path = require("path");
+const { v4: uuidv4 } = require("uuid")
 
 // express specific
 // these three lines will always be the same
@@ -38,12 +39,13 @@ app.get("/api/notes", (req, res) => {
 });
 
 app.post("/api/notes", (req, res) => {
+  const savedNote = req.body;
   const data = (fs.readFileSync('./db/db.json', 'utf-8')); // we can't just write to the file, we need to read the file first
   const notes = data ? JSON.parse(data) : []; // so, read the file, save the array to a variable
-  const notesStr = JSON.stringify(notes, null, 2);  // then, we need to push the new note to the variable
-  fs.writeFileSync('./db/db.json', notesStr);  // then, we need to write to the file
-  res.json(notes);  // this is sending the data from the json file back
- // then we need to respond with some sort of confirmation
+  notes.push({ ...savedNote, id: uuidv4() }); // we're pushing the new note to the array - savedNote);   // then, we need to push the new note to the variable
+  const notesStr = JSON.stringify(notes, null, 2); // then, we need to write to the file 
+  fs.writeFileSync('./db/db.json', notesStr); // this is sending the data from the json file back  
+  res.json(notes);  // then we need to respond with some sort of confirmation  
  
 });
 
